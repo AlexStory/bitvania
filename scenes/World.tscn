@@ -1,0 +1,13 @@
+[gd_scene format=2]
+
+[node name="Node" type="Node"]
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 0.212
+anchor_bottom = 0.242
+margin_right = -177.088
+margin_bottom = -131.2
+text = "title"
+__meta__ = {
+"_edit_use_anchors_": false
+}
