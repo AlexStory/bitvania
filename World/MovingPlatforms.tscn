@@ -28,6 +28,8 @@ tracks/0/keys = {
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
 position = Vector2( 0, -29.8945 )
+collision_layer = 2
+collision_mask = 0
 motion/sync_to_physics = true
 
 [node name="Sprite" type="Sprite" parent="KinematicBody2D"]

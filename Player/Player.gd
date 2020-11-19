@@ -106,7 +106,7 @@ func move():
 	var was_in_air = !is_on_floor()
 	var last_position = position
 	var last_motion = motion
-	motion = move_and_slide_with_snap(motion, snap_vector * 4, Vector2.UP, true, 4, deg2rad(MAX_SLOPE_ANGLE))
+	motion = move_and_slide_with_snap(motion, snap_vector * 4, Vector2.UP, true)
 	
 	# just left ground
 	if was_on_flor and !is_on_floor() and !just_jumped:
