@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 const DustEffect = preload("res://Effects/DustEffect.tscn")
 const PlayerBullet = preload("res://Player/PlayerBullet.tscn")
+const JumpEffect = preload("res://Effects/JumpEffect.tscn")
 
 export(int) var ACCELERATION = 512
 export(int) var MAX_SPEED = 64
@@ -13,11 +14,13 @@ export(int) var BULLET_SPEED = 250
 
 var motion := Vector2.ZERO
 var snap_vector := Vector2.ZERO
-var just_left_ground := false
 var just_jumped := false
+var jump_queued := false
+var invincible := false setget set_invincible
 
 onready var sprite := $Sprite
 onready var sprite_animator := $SpriteAnimator
+onready var blink_animator := $BlinkAnimator
 onready var coyote_jump_timer := $CoyoteJumpTimer
 onready var gun := $Sprite/PlayerGun
 onready var muzzle := $Sprite/PlayerGun/Sprite/Muzzle
@@ -74,14 +77,24 @@ func update_snap_vector():
 		snap_vector = Vector2.DOWN
 
 
-func jump_check():
-	if (is_on_floor() or coyote_jump_timer.time_left > 0) and Input.is_action_just_pressed("action_jump"):
-		motion.y = -JUMP_FORCE
-		snap_vector = Vector2.ZERO
-		just_jumped = true
+func initiate_jump() -> bool:
+	return (is_on_floor() or coyote_jump_timer.time_left > 0) and Input.is_action_just_pressed("action_jump")
+
+
+func jump_check() -> void:
+	if initiate_jump() or jump_queued:
+		apply_jump_force()
 	if Input.is_action_just_released("action_jump") and motion.y < -JUMP_FORCE / 2:
 		motion.y = -JUMP_FORCE / 2
-		
+
+
+func apply_jump_force() -> void:
+	motion.y = -JUMP_FORCE
+	snap_vector = Vector2.ZERO
+	just_jumped = true
+	jump_queued = false
+	Utils.instance_scene_on_main(JumpEffect, global_position)
+
 
 func apply_gravity(delta: float):
 	if not is_on_floor():
@@ -119,5 +132,17 @@ func move():
 		motion.x = last_motion.x
 		create_dust_effect()
 		
+		if Input.is_action_pressed("action_jump"):
+			jump_queued = true
+		
 	if is_on_floor() and get_floor_velocity().length() == 0 and abs(motion.x) < 1:
 		position.x = last_position.x
+
+
+func _on_Hurtbox_hit(damage):
+	if not invincible:
+		blink_animator.play("Blink")
+
+
+func set_invincible(value: bool) -> void:
+	invincible = value

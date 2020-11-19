@@ -1,4 +1,4 @@
-extends "res://Enemies/Enemy.gd"
+extends Enemy
 
 
 enum DIRECTION {
@@ -15,7 +15,10 @@ onready var floor_right := $FloorRight
 onready var wall_left := $WallLeft
 onready var wall_right := $WallRight
 
-func _physics_process(delta: float) -> void:
+func _ready() -> void:
+	motion.y = 8
+
+func _physics_process(_delta: float) -> void:
 	match state:
 		DIRECTION.LEFT:
 			motion.x = -MAX_SPEED
