@@ -4,6 +4,8 @@ const DustEffect = preload("res://Effects/DustEffect.tscn")
 const PlayerBullet = preload("res://Player/PlayerBullet.tscn")
 const JumpEffect = preload("res://Effects/JumpEffect.tscn")
 
+var PlayerStats = ResLoader.PlayerStats
+
 export(int) var ACCELERATION = 512
 export(int) var MAX_SPEED = 64
 export(float) var FRICTION = 0.25
@@ -25,6 +27,11 @@ onready var coyote_jump_timer := $CoyoteJumpTimer
 onready var gun := $Sprite/PlayerGun
 onready var muzzle := $Sprite/PlayerGun/Sprite/Muzzle
 onready var fire_bullet_timer := $FireBulletTimer
+
+
+func _ready() -> void:
+	PlayerStats.connect("player_died", self, "_on_died")
+
 
 func _physics_process(delta) -> void:
 	just_jumped = false
@@ -134,12 +141,19 @@ func move():
 		
 		if Input.is_action_pressed("action_jump"):
 			jump_queued = true
-		
+			
+	# TODO: Not hack
 	if is_on_floor() and get_floor_velocity().length() == 0 and abs(motion.x) < 1:
 		position.x = last_position.x
 
 
+func _on_died() -> void:
+	queue_free()
+
+
 func _on_Hurtbox_hit(damage):
+	PlayerStats.health -= damage
+	
 	if not invincible:
 		blink_animator.play("Blink")
 
