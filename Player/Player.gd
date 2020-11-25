@@ -19,6 +19,7 @@ var snap_vector := Vector2.ZERO
 var just_jumped := false
 var jump_queued := false
 var invincible := false setget set_invincible
+var double_jump := true
 
 onready var sprite := $Sprite
 onready var sprite_animator := $SpriteAnimator
@@ -88,13 +89,15 @@ func initiate_jump() -> bool:
 
 func jump_check() -> void:
 	if initiate_jump() or jump_queued:
-		apply_jump_force()
+		apply_jump_force(JUMP_FORCE)
 	if Input.is_action_just_released("action_jump") and motion.y < -JUMP_FORCE / 2:
 		motion.y = -JUMP_FORCE / 2
+	if Input.is_action_just_pressed("action_jump") and double_jump and !is_on_floor():
+		double_jump = false
+		apply_jump_force(JUMP_FORCE * .75)
 
-
-func apply_jump_force() -> void:
-	motion.y = -JUMP_FORCE
+func apply_jump_force(jump_force: float) -> void:
+	motion.y = -jump_force
 	snap_vector = Vector2.ZERO
 	just_jumped = true
 	jump_queued = false
@@ -136,6 +139,7 @@ func move():
 	if was_in_air and is_on_floor():
 		motion.x = last_motion.x
 		create_dust_effect()
+		double_jump = true
 		
 		if Input.is_action_pressed("action_jump"):
 			jump_queued = true
