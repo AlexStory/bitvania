@@ -50,8 +50,6 @@ func fire_bullet() -> void:
 	if Input.is_action_pressed("action_fire") and fire_bullet_timer.time_left == 0:
 		var bullet = Utils.instance_scene_on_main(PlayerBullet, muzzle.global_position)
 		bullet.velocity = Vector2.RIGHT.rotated(gun.rotation) * BULLET_SPEED
-		print(gun.rotation)
-		print(BULLET_SPEED)
 		bullet.velocity.x *= sprite.scale.x
 		bullet.rotation = bullet.velocity.angle()
 		fire_bullet_timer.start()

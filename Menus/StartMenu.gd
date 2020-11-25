@@ -5,7 +5,7 @@ func _ready():
 
 
 func _on_StartButton_pressed():
-	get_tree().change_scene("res://scenes/World.tscn")
+	var _res = get_tree().change_scene("res://scenes/World.tscn")
 
 
 func _on_LoadButton_pressed():
