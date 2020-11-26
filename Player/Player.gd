@@ -6,6 +6,7 @@ const JumpEffect = preload("res://Effects/JumpEffect.tscn")
 const WallDustEffect = preload("res://Effects/WallSlideEffect.tscn")
 
 var PlayerStats = ResLoader.PlayerStats
+var MainInstances = ResLoader.MainInstances
 
 export(int) var ACCELERATION = 512
 export(int) var MAX_SPEED = 64
@@ -41,6 +42,11 @@ onready var fire_bullet_timer := $FireBulletTimer
 
 func _ready() -> void:
 	PlayerStats.connect("player_died", self, "_on_died")
+	MainInstances.Player = self
+
+
+func _exit_tree() -> void:
+	MainInstances.Player = null
 
 
 func _physics_process(delta: float) -> void:
