@@ -1,5 +1,5 @@
 extends Node
 
 
-var PlayerStats = preload("res://Player/PlayerStats.tres")
-var MainInstances = preload("res://MainInstances.tres")
+var PlayerStats : PlayerStats = preload("res://Player/PlayerStats.tres")
+var MainInstances : MainInstances = preload("res://MainInstances.tres")

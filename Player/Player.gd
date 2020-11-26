@@ -1,4 +1,5 @@
 extends KinematicBody2D
+class_name Player
 
 const DustEffect = preload("res://Effects/DustEffect.tscn")
 const PlayerBullet = preload("res://Player/PlayerBullet.tscn")
