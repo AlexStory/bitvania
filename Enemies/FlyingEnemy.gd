@@ -5,9 +5,14 @@ export(int) var acceleration = 100
 var instances: MainInstances = ResLoader.MainInstances
 
 onready var sprite := $Sprite
+
 var state := IDLE
 
 enum { CHASE, IDLE }
+
+
+func _ready() -> void:
+	set_physics_process(false)
 
 
 func _physics_process(delta: float) -> void:
@@ -24,3 +29,7 @@ func chase_player(player: Player, delta: float) -> void:
 	motion = move_and_slide(motion)
 
 
+
+
+func _on_VisibilityNotifier2D_screen_entered():
+	set_physics_process(true)
